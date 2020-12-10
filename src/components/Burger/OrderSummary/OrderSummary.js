@@ -1,36 +1,37 @@
-import React, { Component } from "react";
-import Wrap from "../../../hoc/Wrap";
-import Button from "../../UI/Button/Button";
+import React, { Component } from 'react';
+
+import Wrap from '../../../hoc/Wrap/Wrap';
+import Button from '../../UI/Button/Button';
 
 class OrderSummary extends Component {
-  componentDidUpdate(){
-    console.log("Ordersummary Updated");
-  }
-  render() {
-    const ingredientSummary = Object.keys(this.props.ingredients).map(
-      (igKey) => {
+    // This could be a functional component, doesn't have to be a class
+    componentWillUpdate() {
+        console.log('[OrderSummary] WillUpdate');
+    }
+
+    render () {
+        const ingredientSummary = Object.keys( this.props.ingredients )
+            .map( igKey => {
+                return (
+                    <li key={igKey}>
+                        <span style={{ textTransform: 'capitalize' }}>{igKey}</span>: {this.props.ingredients[igKey]}
+                    </li> );
+            } );
+
         return (
-          <li key={igKey}>
-            {igKey}: {this.props.ingredients[igKey]}
-          </li>
+            <Wrap>
+                <h3>Your Order</h3>
+                <p>A delicious burger with the following ingredients:</p>
+                <ul>
+                    {ingredientSummary}
+                </ul>
+                <p><strong>Total Price: {this.props.price.toFixed( 2 )}</strong></p>
+                <p>Continue to Checkout?</p>
+                <Button btnType="Danger" clicked={this.props.purchaseCancelled}>CANCEL</Button>
+                <Button btnType="Success" clicked={this.props.purchaseContinued}>CONTINUE</Button>
+            </Wrap>
         );
-      }
-    );
-    return (
-      <Wrap>
-        <h3>Your Order</h3>
-        <p> Ingredients</p>
-        <ul>{ingredientSummary}</ul>
-        <p>{this.props.price}$</p>
-        <Button btnType="Danger" clicked={this.props.checkOutCancelled}>
-          CANCEL
-        </Button>
-        <Button btnType="Success" clicked={this.props.checkOutConfirmed}>
-          CONTINUE
-        </Button>
-      </Wrap>
-    );
-  }
+    }
 }
 
 export default OrderSummary;
